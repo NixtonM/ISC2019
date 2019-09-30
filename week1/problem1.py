@@ -18,3 +18,14 @@ plt.show()
 
 # playing
 Audio(audio, rate=rate)
+
+print(audio.dtype) # int16
+print(audio.size) # 37888
+print("Total number of elements: {0} of type: {1}. Space required {2}"
+      " kilobytes".format(audio.size, audio.dtype, 2 * audio.size / 2**10))
+
+
+from sys import getsizeof
+
+print(getsizeof(audio))
+print(audio.nbytes)
