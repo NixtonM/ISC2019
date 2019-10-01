@@ -20,12 +20,32 @@ plt.show()
 Audio(audio, rate=rate)
 
 print(audio.dtype) # int16
-print(audio.size) # 37888
+N = audio.size # 37888
 print("Total number of elements: {0} of type: {1}. Space required {2}"
       " kilobytes".format(audio.size, audio.dtype, 2 * audio.size / 2**10))
 
+print("Size of convolution matrix N x N of type float64: {0} megabytes".format(
+    8 * audio.size**2 / 2**20))
 
-from sys import getsizeof
+reduced_audio = audio[::4]
+N = reduced_audio.size
 
-print(getsizeof(audio))
-print(audio.nbytes)
+print("Size of convolution matrix N x N of type float64: {0} megabytes".format(
+    8 * reduced_audio.size**2 / 2**20))
+
+
+def gen_toeplitz(N, alpha):
+    numvec = np.linspace(0,N-1,N,dtype=np.int32)
+    print("Length {} of type {}".format(numvec.size,numvec.dtype))
+    print(numvec)
+    Tij = np.sqrt(alpha/np.pi)*np.e**(-alpha*(numvec**2))
+#    print(Tij)
+
+    T = toeplitz(Tij,Tij)
+    print(T)
+    return T
+
+gen_toeplitz(N,1/5)
+T = gen_toeplitz(N,1/100)
+
+print(np.matmul(T,reduced_audio))
